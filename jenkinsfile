@@ -10,4 +10,11 @@ pipeline {
             
         }
 
-       }}
+       }
+       
+       stage("build image"){
+            steps{ script {
+                sh "sudo docker build -t  kumarbgm16/web:${BUILD_TAG}  ."
+            }
+            }
+       }
