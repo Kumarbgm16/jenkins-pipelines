@@ -4,7 +4,7 @@ pipeline {
      stages {
         stage('SCM') {
             steps {
-                 git 'https://github.com/Kumarbgm16/jenkins-pipelines.git'
+                 sh 'git clone https://github.com/Kumarbgm16/jenkins-pipelines.git'
                 
             }
             
