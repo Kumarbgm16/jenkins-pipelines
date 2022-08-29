@@ -10,39 +10,4 @@ pipeline {
             
         }
 
-        stage("build image"){
-            steps{ script {
-                tag="lwplapbs/go-redis-app" + ":$BUILD_NUMBER"
-                app = docker.build("$tag")
-            }
-            }
-        }
-
-        stage("docker login"){
-            steps{
-                sh '''
-                    docker login -u kumarbgm16@gmail.com -p $DOCKER_PASS
-                    '''
-            }
-        }
-
-        stage("docker push"){
-            steps{ script {
-                app.push()
-            }
-        }
-        }
-
-        stage("create kubeconfig"){
-            steps{
-                sh '''
-                    echo $BUILD_NUMBER
-                    export KUBECONFIG=/tmp/config
-                    aws eks --region ap-south-1 update-kubeconfig --name eks-cluster7
-                    kubectl apply -f manifests
-                    kubectl set image -f manifests/go-redis-app.yml go-redis-app=lwplapbs/go-redis-app:${BUILD_NUMBER}
-                    '''
-            }
-        }
-        
-    }}
+       }
