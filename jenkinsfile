@@ -7,14 +7,12 @@ pipeline {
                  sh 'git clone https://github.com/Kumarbgm16/jenkins-pipelines.git'
                 
             }
-            
+         }   
         }
-
-       
        
        stage("build image"){
-            steps{ script {
+            steps{ 
                 sh "sudo docker build -t  kumarbgm16/web:${BUILD_TAG}  ."
             }
             }
-       }}
+       }
