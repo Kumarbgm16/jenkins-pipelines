@@ -1,24 +1,13 @@
-#!groovy
-
 pipeline {
     agent any
 
-    environment {
-        GIT_URL = 'https://github.com/thedevopsstore/jenkins-pipelines.git'
-         AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-         DOCKERHUB = credentials('docker_creds')
-
-    }
-
-    stages {
-
-        stage("clone code"){
-            steps{
-                cleanWs()
-                checkout scm
-                stash 'source'
+     stages {
+        stage('SCM') {
+            steps {
+                git 'https://github.com/thedevopsstore/jenkins-pipelines.git'
+                
             }
+            
         }
 
         stage("build image"){
@@ -32,8 +21,7 @@ pipeline {
         stage("docker login"){
             steps{
                 sh '''
-                    docker login -u $DOCKERHUB_USR -p $DOCKERHUB_PSW
-
+                    docker login -u kumarbgm16@gmail.com -p $DOCKER_PASS
                     '''
             }
         }
@@ -50,14 +38,11 @@ pipeline {
                 sh '''
                     echo $BUILD_NUMBER
                     export KUBECONFIG=/tmp/config
-                    aws eks --region us-east-2 update-kubeconfig --name eks-cluster
+                    aws eks --region ap-south-1 update-kubeconfig --name eks-cluster7
                     kubectl apply -f manifests
                     kubectl set image -f manifests/go-redis-app.yml go-redis-app=lwplapbs/go-redis-app:${BUILD_NUMBER}
-
                     '''
             }
         }
         
-    }
-
-}
+    }}
